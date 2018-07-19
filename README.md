@@ -15,8 +15,58 @@ For example, one can then list the version of uboonecode stored in the container
 
     ups list -aK+ uboonecode
 
-Note that the last step of the dockerfile also install LArCV2.
+## Build Docker image
+
+Of course, you need to install docker.
+
+To build the image
+
+    sudo docker build -t [container_name:tag] .
+
+Note that the last step of the Dockerfile installs LArCV2.
 This is used by our group to make truth-labeled training data.
+
+## Run the Docker image
+
+To run the image
+
+    docker run -it [container_name:tag] bash
+
+Setup uboonecode
+
+    setup uboonecode [version] [qualifier]
+
+
+Run larsoft
+
+    lar -c [fcl file] -s [input file]
+
+## Build a singularity image, based on the docker image
+
+We use singularity's feature of importing a docker image.
+To do that, we have to push the docker image to dockerhub.
+You'll need a dockerhub account.
+
+Once you get an account, push to dockerhub
+
+    docker login
+    docker push [container_name:tag]
+
+Then build the singularity image. Note that the build file has extra folders created to allow
+network folders to be mounted on the Tufts Cluster.
+
+    sudo singularity build [output_image_name] Singularity
+    
+## Run the singularity image
+
+Start the singularity container by
+
+    singularity shell [container image]
+    prompt> bash
+    
+Then follow the instructions for the docker image to run `lar` or build a development copy.
+
+## Setup and build a development copy
 
 Have confirmed that one can also setup and build a development version as well.
 
